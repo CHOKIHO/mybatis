@@ -1,0 +1,56 @@
+﻿
+[mybatis 프레임워크 사용하기]  (자바 어플리케이션)	2017-01-19
+
+ 1. 개념 (방법)
+	1) vo 생성
+		- vo 는 value object. 즉 그건 일반 클래스가 런타임때 자료를 담기위한. 
+		  순수하게 value data 만을 담기 위한 클래스 
+        - bean은 초기화시 직접 객체를 생성해서 컨테이너에 넣어놓고. 
+		  사용자 요청에 따라 그 라이프 싸이클이 관리되는 모든 클래스나 객체
+	2) mapper 생성 (sql 쿼리 + vo) → (dao, dto)
+	3) config 설정 (jdbc + mapper) 
+	4) java
+  
+ 
+ 2. myBatis 라이브러리 다운받기
+ 
+   사이트 : http://blog.mybatis.org/
+   docs   : http://www.mybatis.org/mybatis-3/ko/index.html
+   
+ 3. 이클립스
+	1) preference - general - workspace - encoding
+   
+	2) 프로젝트 - properties - build path - external add library
+           (프로젝트 - build path - Libraries)
+	   
+		1. 오라클 jdbc lib 추가 - C:\oraclexe\app\oracle\product\10.2.0\server\jdbc\lib
+		2. mybatis lib 추가     - C:\mybatis_study\util\mybatis-3.4.2\mybatis-3.4.2
+ 
+ 4. 자바 client 어플리케이션에서 사용하기
+	1)vo
+		User.java - 레코드 아이템
+	
+	2)mapper
+		UserMapper.xml - SQL문 맵퍼 (resultType)
+		//UserMapperInterface.java - SQL문 수행을 위한 인터페이스
+
+	3)config
+		config.xml에 jdbc, 맵퍼 추가 
+	
+	4)java client 개발
+	  1) mybatis 환경설정 파일과 연결할 스트림	
+	  2) 연결파일(config.xml) read - factory 생성
+	  3) factory를 통해 SqlSession을 얻기
+	  4) sql 호출
+	  5) 결과처리	  
+	
+
+ 5. 자바 웹 어플리케이션(jsp, 서블릿, 스프링)
+		mybatis-config.xml을 web.xml에 설정후 웹페이지 생성
+	
+	
+[NetBeans IDE]  스윙컴포넌트
+ 1. oracle.com
+ 2. tool - libraries : 라이브러리 등록후 프로젝트 Libraries에 add Library로 추가
+	
+	
