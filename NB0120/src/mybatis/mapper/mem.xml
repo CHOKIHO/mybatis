@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="mem">
+
+    <select id="total" resultType="mybatis.vo.MemVO">
+        select * from member
+    </select>
+    
+    <select id="searchName" resultType="mybatis.vo.MemVO" parameterType="String">        
+        select * from member where name like '%'||#{sname}||'%'
+    </select>
+    
+    <select id="searchId" resultType="mybatis.vo.MemVO" parameterType="String">        
+        select * from member where id = #{sid}
+    </select>
+    
+    <update id="update" parameterType="java.util.Map">
+        update member
+          set  name = #{name},
+               email = #{email},
+               phone = #{phone}
+         where id = #{id}      
+    </update>
+   
+    <insert id="add" parameterType="java.util.Map">
+        insert into member 
+                ( id,   pwd,    name,    email,    phone,    reg_date )
+        values  ( #{id},#{pwd}, #{name}, #{email}, #{phone}, sysdate )
+    </insert>
+  
+</mapper>
