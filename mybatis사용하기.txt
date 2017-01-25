@@ -1,4 +1,4 @@
-﻿
+
 [mybatis 프레임워크 사용하기]  (자바 어플리케이션)	2017-01-19
 
  1. 개념 (방법)
@@ -28,11 +28,65 @@
  
  4. 자바 client 어플리케이션에서 사용하기
 	1)vo
-		User.java - 레코드 아이템
+		User.java - 레코드 아이템  
 	
 	2)mapper
 		UserMapper.xml - SQL문 맵퍼 (resultType)
+		 ①resultType
+		 ②parameterType, SQL (#{id} : 변수명)
+		 ③동적sql처리 (<if>, <where>, <choose>, <trim>, <foreach>)
+		 ④resultMap : 컬러명과 resultType이 다른경우, 조인시
+
+		    --상속지원 (extends) --------------------------------------------------------------------------------
+		    <resultMap id="r1" type="mybatis.vo.DeptVO">
+			<id column="department_id" property="department_id"/>
+			<id column="department_name" property="deprName"/>
+			<id column="location_id" property="loc_ide"/>
+		    </resultMap>
+
+		    <resultMap id="r2" extends="r1" type="mybatis.vo.DeptVO">
+			<id column="city" property="city"/>
+		    </resultMap>
+
+		    --스칼라 서브쿼리 (association) 1:M 구조 (기준테이블 : M) -------------------------------------------
+
+		    <resultMap id="map1" type="mybatis.vo.DeptVO2">
+			<association property="lvo" javaType="mybatis.vo.LocVO" select="getLoc" column="location_id"/>
+		    </resultMap>
+
+		    <select id="all" resultMap="map1">
+			select  *
+			  from  dept
+		    </select>
+
+		    <select id="getLoc" resultType="mybatis.vo.LocVO" parameterType="int">
+			select  *
+			  from  locations
+			 where  location_id = #{no}
+		    </select>
+
+		    --조인 (collection) 1:M 구조 (기준테이블 : 1)-------------------------------------------------------
+
+	            <resultMap id="m1" type="mybatis.vo.LocVO" >
+			<id column="location_id" property="location_id"/>  <!-- 안넣으면 null값 발생  -->
+			<collection property="d_list" ofType="mybatis.vo.DeptVO" select="getDept" column="location_id"/>
+		    </resultMap>
+		    
+		    <select id="all" resultMap="m1">
+			select * from locations
+		    </select>
+		    
+		    <select id="getDept" resultType="mybatis.vo.DeptVO" parameterType="int">
+			select * from dept
+			 where location_id = #{id}
+		    </select>
+
+		 
+		 ⑤alias
+		
 		//UserMapperInterface.java - SQL문 수행을 위한 인터페이스
+		
+		
 
 	3)config
 		config.xml에 jdbc, 맵퍼 추가 
@@ -47,6 +101,8 @@
 
  5. 자바 웹 어플리케이션(jsp, 서블릿, 스프링)
 		mybatis-config.xml을 web.xml에 설정후 웹페이지 생성
+		
+		jsp, jstl(jsp tag library)
 	
 	
 [NetBeans IDE]  스윙컴포넌트
@@ -54,3 +110,20 @@
  2. tool - libraries : 라이브러리 등록후 프로젝트 Libraries에 add Library로 추가
 	
 	
+	
+Caused by: org.apache.ibatis.builder.BuilderException: Error evaluating expression 
+	'searchType != null AND searchValue != null'. 
+	Cause: org.apache.ibatis.ognl.ExpressionSyntaxException: M
+	alformed OGNL expression: searchType != null AND searchValue != null 
+	[org.apache.ibatis.ognl.ParseException: Encountered " <IDENT> "AND "" at line 1, column 20.
+		Was expecting one of:
+
+	
+### SQL: select d.department_id, d.department_name, l.city
+			   from dept d, locations l         
+			   where d.location_id = l.location_id 
+			   WHERE  d.location_id = ?
+### Cause: java.sql.SQLException: ORA-00933: SQL 명령어가 올바르게 종료되지 않았습니다
+
+
+
