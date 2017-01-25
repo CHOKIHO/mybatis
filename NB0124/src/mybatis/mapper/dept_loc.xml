@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="dept_loc">
+    
+    <resultMap id="r1" type="mybatis.vo.DeptVO">
+        <id column="department_id" property="department_id"/>
+        <id column="department_name" property="deptName"/>
+        <id column="location_id" property="loc_id"/>
+    </resultMap>
+
+    <resultMap id="r2" extends="r1" type="mybatis.vo.DeptVO">
+        <id column="city" property="city"/>
+    </resultMap>
+
+    <select id="get_dept" resultMap="r2">
+        select a.*, b.* 
+          from dept a, locations b
+         where a.location_id = b.location_id
+    </select>
+  
+</mapper>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="mem">
+    
+    <insert id="add1" parameterType="mybatis.vo.MemVO">
+      insert into member (id, pwd, name, email, phone, reg_date)
+      values (#{id}, #{pwd}, #{name}, #{email}, #{phone}, sysdate)
+    </insert>  
+
+    <insert id="add2" parameterType="java.util.Map">
+        
+        <!-- 컬렉션 속성은 배열이 Map저장된 키값 -->
+        <foreach collection="m_list" item="vo" separator=";" index="idx">
+            insert into member (id, pwd, name, email, phone, reg_date)
+            values
+
+            (#{vo.id}, #{vo.pwd}, #{vo.name}, #{vo.email}, #{vo.phone}, sysdate)
+        </foreach>
+        
+    </insert>  
+            
+</mapper>

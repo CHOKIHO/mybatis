@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="loc">
+    
+     <resultMap id="m1" type="mybatis.vo.LocVO">
+        <id column="location_id" property="location_id"/>  <!-- 안넣으면 null값 발생  -->
+        <collection property="d_list" ofType="mybatis.vo.DeptVO" select="getDept" column="location_id"/>
+    </resultMap>
+    
+    <select id="all" resultMap="m1">
+        select * from locations
+    </select>
+    
+    <select id="getDept" resultType="mybatis.vo.DeptVO" parameterType="int">
+        select * from dept
+         where location_id = #{id}
+    </select>
+    
+</mapper>
+
+
+
+
+
+
+

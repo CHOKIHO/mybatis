@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="emp">
+    
+    <resultMap id="m1" type="mybatis.vo.EmpVO">
+        <id column="employee_id" property="employee_id"></id>
+        <result column="first_name" property="first_name"></result>
+        
+        <association property="jvo" javaType="mybatis.vo.JobVO" select="getJob" column="job_id"/>
+        <association property="dvo" javaType="mybatis.vo.DeptVO" select="getDept" column="department_id"/>
+    </resultMap>
+
+    <resultMap id="m2" type="mybatis.vo.DeptVO">
+        <association property="lvo" javaType="mybatis.vo.LocVO" select="getLoc" column="location_id"/>
+    </resultMap>
+        
+       
+    <select id="all" resultMap="m1">
+        select * from emp
+    </select>
+    
+    <select id="getJob" resultType="mybatis.vo.JobVO" parameterType="String">
+        select * from jobs
+         where job_id = #{id}
+    </select>
+
+    <select id = "getDept" parameterType="int" resultMap="m2">
+        select * from dept
+        where department_id=#{id}  
+    </select>
+    
+    <select id="getLoc" parameterType="int" resultType="mybatis.vo.LocVO">
+        select * from locations
+        where location_id=#{id}
+    </select>
+
+</mapper>
+
+
+
+
+

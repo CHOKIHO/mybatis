@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="dept_loc">
+    
+    <resultMap id="r1" type="deptLoc">
+        <id column="department_id" property="department_id"/>
+    </resultMap>
+    
+    <select id="get_dept" resultMap="r1">
+        select a.*, b.* 
+          from dept a, locations b
+         where a.location_id = b.location_id
+    </select>
+    
+    
+    <resultMap id="r2" type="mybatis.vo.Dept_Loc_Search">
+        <id column="d.department_id" property="department_id"/>
+    </resultMap>
+    
+    <select id="search_dept_loc" resultMap="r2">
+        select d.department_id, d.department_name, l.city
+          from dept d, locations l
+
+       <if test="searchType != null and searchValue != null">  <!--동적sql 처리를 위한 if-->
+            <where>
+                <choose>
+                    <when test="searchType == 0">
+                        and d.location_id = #{searchValue}
+                    </when>
+                    <when test="searchType == 1">
+                        l.city like '%'||#{searchValue}||'%'
+                    </when>
+                    <when test="searchType == 2">
+                        d.department_id = #{searchValue}
+                    </when>
+                    <when test="searchType == 3">
+                        department_name like '%'||#{searchValue}||'%'
+                    </when>
+                </choose>
+            </where>
+        </if>
+         and d.location_id = l.location_id
+        
+    </select>
+  
+</mapper>

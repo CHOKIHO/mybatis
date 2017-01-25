@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="emp_rel">
+  
+    <resultMap id="map1" type="mybatis.vo.EmpVO">
+        <!--기본키 설정-->
+        <id column="employee_id" property="employee_id"/>
+        
+        <!-- Jobs테이블과 1:1관계를 연결한다. 해당사원의 job_id를 보내어 jobs테이블에 있는
+            job_title 등을 조합하여 JobVO로 받아 현재객체(EmpVO)의 jvo라는 변수에 대입한다. -->
+        <association property="jvo" javaType="mybatis.vo.JobVO" select="getJob" column="job_id"/>
+        <association property="dvo" javaType="mybatis.vo.DeptVO" select="getDept" column="department_id"/>
+    </resultMap>
+    
+    <resultMap id="map2" type="mybatis.vo.DeptVO">
+        <association property="lvo" javaType="mybatis.vo.LocVO" select="getLoc" column="location_id"/>
+        
+    </resultMap>
+        
+    <!-- 사원에 대한 정보를 얻는 select -->
+    <select id="all" resultMap="map1">
+        SELECT * FROM emp        
+    </select>
+    
+    <!-- job_id를 받아서 해당 job정보를 JobVO로 반환하는 select -->
+    <select id="getJob" resultType="mybatis.vo.JobVO" 
+            parameterType="String">
+        SELECT * FROM jobs
+        WHERE job_id = #{id}
+    </select>
+    
+    <select id="getDept" parameterType="int" 
+            resultMap="map2">
+        SELECT * FROM dept
+        WHERE department_id = #{id}
+    </select>
+    
+    <select id="getLoc" resultType="mybatis.vo.LocVO"
+            parameterType="int">
+        SELECT * FROM locations
+        WHERE location_id = #{id}
+    </select>
+    
+    <!--검색 하는 select -->
+    <select id="search" resultMap="map1" 
+            parameterType="java.util.Map">
+        SELECT a.* FROM emp a,jobs b
+        WHERE department_id IS NOT NULL 
+        AND a.job_id = b.job_id
+        <if test="searchType != null and searchValue != null">
+            <choose>
+                <when test="searchType == 0">
+                    AND a.employee_id = #{searchValue}
+                </when>
+                <when test="searchType == 1">
+                    AND a.first_name LIKE '%'||#{searchValue}||'%'
+                </when>
+                <when test="searchType == 2">
+                    AND b.job_title LIKE '%'||#{searchValue}||'%'
+                </when>
+            </choose>
+        </if>
+    </select>
+    
+</mapper>
+
+
+
+
+
+
+

@@ -373,8 +373,11 @@ public class MyJFrame extends javax.swing.JFrame {
         
         if (cnt==1) {
             JOptionPane.showMessageDialog(this, "정상적으로 수정되었습니다.");
+            ss.commit();
         } else {
             JOptionPane.showMessageDialog(this, "수정 실패");
-        }    
+            ss.rollback();
+        }
+        ss.close();
     }
 }

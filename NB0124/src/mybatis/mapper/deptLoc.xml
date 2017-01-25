@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="deptLoc">
+
+    <resultMap id="map1" type="mybatis.vo.DeptVO2">
+        
+        <association property="lvo" javaType="mybatis.vo.LocVO" select="getLoc" column="location_id"/>
+        
+    </resultMap>
+
+    <select id="all" resultMap="map1">
+        select  *
+          from  dept
+    </select>
+
+    <select id="getLoc" resultType="mybatis.vo.LocVO" parameterType="int">
+        select  *
+          from  locations
+         where  location_id = #{no}
+    </select>
+
+</mapper>

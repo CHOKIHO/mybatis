@@ -20,13 +20,13 @@
           set  name = #{name},
                email = #{email},
                phone = #{phone}
-         where id = #{id}      
+         where id = #{id}
     </update>
    
     <insert id="add" parameterType="java.util.Map">
         insert into member 
                 ( id,   pwd,    name,    email,    phone,    reg_date )
-        values  ( #{id},#{pwd}, #{name}, #{email}, #{phone}, sysdate )
+        values  ( #{id},#{pwd}, #{name}, #{email}, #{phone}, sysdate  )
     </insert>
   
 </mapper>

@@ -1,0 +1,40 @@
+package mybatis.vo;
+
+public class EmpVO {
+    private String employee_id, first_name;
+    
+    private JobVO jvo;// 직종 정보
+    private DeptVO dvo;//부서 정보
+
+    public String getEmployee_id() {
+        return employee_id;
+    }
+
+    public void setEmployee_id(String employee_id) {
+        this.employee_id = employee_id;
+    }
+
+    public String getFirst_name() {
+        return first_name;
+    }
+
+    public void setFirst_name(String first_name) {
+        this.first_name = first_name;
+    }
+
+    public JobVO getJvo() {
+        return jvo;
+    }
+
+    public void setJvo(JobVO jvo) {
+        this.jvo = jvo;
+    }
+
+    public DeptVO getDvo() {
+        return dvo;
+    }
+
+    public void setDvo(DeptVO dvo) {
+        this.dvo = dvo;
+    }
+}
