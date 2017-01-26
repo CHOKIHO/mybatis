@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="loc">
+    
+     <resultMap id="mm" type="mybatis.vo.LocVO">
+         
+         <!--
+            country id가 'UK' country_name, region_id, region_name을 출력
+                         'US' country_name만 출력
+         -->
+         <discriminator javaType="String" column="country_id">
+             <case value="UK" resultMap="mm_1"/>
+             <case value="US" resultMap="mm_2"/>
+         </discriminator>
+    </resultMap>
+    
+    <resultMap id="mm_1" type="mybatis.vo.LocVO" extends="mm">
+        <association property="cvo" javaType="mybatis.vo.CouVO" select="get_cou_region" column="country_id"/>
+    </resultMap>
+
+    <resultMap id="mm_2" type="mybatis.vo.LocVO" extends="mm">
+        <association property="cvo" javaType="mybatis.vo.CouVO" select="get_cou" column="country_id"/>
+    </resultMap>
+            
+    <select id="all" resultMap="mm">
+        select * from locations where country_id in ('UK', 'US')
+    </select>
+    
+    <select id="get_cou_region" parameterType="String" resultType="mybatis.vo.CouVO">
+        select a.*, b.* from countries a, regions b
+         where country_id = #{id}
+           and a.region_id = b.region_id        
+    </select>
+    
+    <select id="get_cou" parameterType="String" resultType="mybatis.vo.CouVO">
+        select * from countries
+         where country_id = #{id}
+    </select>
+    
+</mapper>

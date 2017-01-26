@@ -3,8 +3,15 @@
 
 <mapper namespace="dept">
     
-     <resultMap id="m1" type="mybatis.vo.DeptVO" >
-        <id column="department_id" property="department_id"/>  <!-- 안넣으면 null값 발생  -->
+     <resultMap id="m1" type="mybatis.vo.DeptVO">
+         <constructor>
+            <idArg column="department_id" javaType="String"/>
+            <arg column="department_name" javaType="String"/>
+         </constructor>
+         
+        <!-- 안넣으면 null값 발생
+        <id column="department_id" property="department_id"/>
+          -->
         <collection property="e_list" ofType="mybatis.vo.EmpVO" select="getEmp" column="department_id"/>
     </resultMap>
     
